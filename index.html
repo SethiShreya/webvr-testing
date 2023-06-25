@@ -17,22 +17,7 @@
            border-radius: 18px;
             height: 700px;
         }
-      #VRButton{
-        position: absolute;
-        width: 100px;
-        right: 20px;
-        bottom: 20px;
-        padding: 10px 20px;
-        background-color: black;
-        color: #fff;
-        opacity: 0.5;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        z-index: 9999; 
-      }
-
+      
     </style>
 
     
@@ -50,7 +35,6 @@
   
 
     <div id="container">
-        <button id="VRButton"></button>
     </div>
     
     <script src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
@@ -62,7 +46,8 @@
       <script type="module">
         import * as THREE from 'three';
 
-        import {VRButton} from './VRButton.js'
+        // import {VRButton} from './VRButton.js'
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
@@ -76,7 +61,7 @@
 
 
         const renderer = new THREE.WebGLRenderer( { antialias: true } );
-        VRButton.createButton( renderer, "VRButton","container" );
+        container.appendChild( VRButton.createButton( renderer ) );
         renderer.xr.enabled = true;
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -133,20 +118,14 @@
 
 
         function animate() {
+        const delta = clock.getDelta();
+        controls.update();
+        renderer.render(scene, camera);
+      }
 
-          requestAnimationFrame( animate );
-
-          const delta = clock.getDelta();
-
-          //mixer.update( delta );
-
-          controls.update();
-
-          // stats.update();
-
-          renderer.render( scene, camera );
-
-        }
+      renderer.setAnimationLoop(() => {
+        animate();
+      });
       </script>
     
   </body>
